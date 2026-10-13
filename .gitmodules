@@ -1,0 +1,7 @@
+[submodule "JUCE"]
+	path = ThirdParty/JUCE
+	url = https://github.com/juce-framework/JUCE.git
+[submodule "muscriptor.cpp"]
+	path = ThirdParty/muscriptor.cpp
+	url = https://github.com/DamRsn/muscriptor.cpp.git
+	branch = main
