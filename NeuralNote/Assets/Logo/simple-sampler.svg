@@ -1,0 +1,20 @@
+<!-- Simple Sampler logo, 2026. Derived from the layout and palette of NeuralNote's logo. -->
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <defs>
+    <linearGradient id="plate" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2C2C34"/>
+      <stop offset="1" stop-color="#0E0E11"/>
+    </linearGradient>
+    <linearGradient id="sheen" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fff" stop-opacity="0.11"/>
+      <stop offset="0.55" stop-color="#fff" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <rect width="1024" height="1024" rx="220" fill="url(#plate)"/>
+  <rect width="1024" height="1024" rx="220" fill="url(#sheen)"/>
+  <g transform="scale(10.24)" fill="none" stroke="#6E9BFF" stroke-width="7.5"
+     stroke-linecap="round" stroke-linejoin="round">
+    <path d="M45 24 C39 16 20 16 17 27 C13 41 45 39 45 56 C45 72 20 83 14 72"/>
+    <path d="M86 24 C80 16 61 16 58 27 C54 41 86 39 86 56 C86 72 61 83 55 72"/>
+  </g>
+</svg>

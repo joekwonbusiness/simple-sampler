@@ -1,11 +1,13 @@
 #!/usr/bin/env python3
-"""Configures and builds NeuralNote in Release for CI, through ccache.
+"""Configures and builds Simple Sampler in Release for CI, through ccache.
+
+Modified from NeuralNote for the Simple Sampler distribution, 2026.
 
 macOS builds one architecture, given by --arch. Windows builds with clang-cl and
 lld-link, taken from CC, CXX, RC, CMAKE_LINKER and CMAKE_AR in the environment
 (see windows_tools.py).
 
-The output is in build/NeuralNote_artefacts/Release.
+The output is in build/SimpleSampler_artefacts/Release.
 """
 
 import argparse
@@ -36,7 +38,7 @@ def macos_options(arch: str, ccache: str) -> tuple[list[str], list[str]]:
         "-DMUSCRIPTOR_METAL_PRECOMPILED=ON",
     ]
 
-    return options, ["NeuralNote_Standalone", "NeuralNote_VST3", "NeuralNote_AU"]
+    return options, ["SimpleSampler_Standalone", "SimpleSampler_VST3", "SimpleSampler_AU"]
 
 
 def windows_options(ccache: str) -> tuple[list[str], list[str]]:
@@ -47,12 +49,14 @@ def windows_options(ccache: str) -> tuple[list[str], list[str]]:
         f"-DCMAKE_LINKER={env['CMAKE_LINKER']}",
         f"-DCMAKE_AR={env['CMAKE_AR']}",
         *launchers(ccache, ["C", "CXX"]),
-        "-DNEURALNOTE_ASIO=ON",
+        # The CI artifact is VST3. Keep the standalone build free of the separately licensed
+        # Steinberg ASIO SDK unless a distributor deliberately opts in under that agreement.
+        "-DNEURALNOTE_ASIO=OFF",
         # Fails the configure if the SDK is missing, rather than building without the backend.
         "-DMUSCRIPTOR_VULKAN=ON",
     ]
 
-    return options, ["NeuralNote_Standalone", "NeuralNote_VST3"]
+    return options, ["SimpleSampler_Standalone", "SimpleSampler_VST3", "UnitTests"]
 
 
 def main() -> None:
@@ -80,12 +84,17 @@ def main() -> None:
         "-DCMAKE_BUILD_TYPE=Release",
         "-DLTO=ON",
         "-DNEURALNOTE_SYMBOLS=ON",
+        "-DBUILD_UNIT_TESTS=ON",
         "-DMUSCRIPTOR_BUILD_TESTS=OFF",
         *options,
     )
 
     run(ccache, "--zero-stats")
     run("cmake", "--build", str(BUILD_DIR), "--target", *targets)
+
+    if sys.platform == "win32":
+        run(str(BUILD_DIR / "Tests" / "UnitTests_artefacts" / "Release" / "UnitTests.exe"))
+
     run(ccache, "--show-stats")
 
 

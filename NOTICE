@@ -1,0 +1,10 @@
+Simple Sampler
+
+This product is a derivative of NeuralNote.
+NeuralNote Copyright 2026 Damien Ronssin and is licensed under the Apache License, Version 2.0.
+
+Simple Sampler modifications made in 2026 include product identity, Windows x64 build and packaging automation,
+application-data naming, documentation, and related presentation changes. The original attribution and license are
+retained in LICENSE, the imported Git history, and Installers/license.txt.
+
+MuScriptor model weights are not included. They are separate CC BY-NC 4.0 downloads; see MODEL_LICENSE.md.

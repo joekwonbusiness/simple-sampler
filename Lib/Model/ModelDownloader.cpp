@@ -1,5 +1,6 @@
 //
 // Created by Damien Ronssin on 12.09.26.
+// Modified for Simple Sampler, 2026.
 //
 
 #include "ModelDownloader.h"
@@ -39,7 +40,7 @@ class ModelDownloader::Job : public juce::Thread
 {
 public:
     explicit Job(ModelSize inModelSize)
-        : juce::Thread("NeuralNote model download (" + juce::String(modelSizeToString(inModelSize)) + ")")
+        : juce::Thread("Simple Sampler model download (" + juce::String(modelSizeToString(inModelSize)) + ")")
         , mModelSize(inModelSize)
     {
     }
@@ -134,10 +135,11 @@ private:
         // Instances in this process share this object and cannot get here twice for one size. The
         // lock is for another process: a standalone next to a host, or a host that runs plugins out
         // of process.
-        juce::InterProcessLock process_lock("NeuralNoteModelDownload_" + juce::String(modelSizeToString(mModelSize)));
+        juce::InterProcessLock process_lock("SimpleSamplerModelDownload_"
+                                            + juce::String(modelSizeToString(mModelSize)));
 
         if (!process_lock.enter(0)) {
-            return "Another NeuralNote is already downloading this model";
+            return "Another Simple Sampler instance is already downloading this model";
         }
 
         const juce::File directory = NNFileUtils::getModelsDirectory();

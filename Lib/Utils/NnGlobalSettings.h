@@ -1,4 +1,5 @@
 //
+// Modified for Simple Sampler, 2026.
 // Created by Damien Ronssin on 29.08.26.
 //
 
@@ -25,7 +26,7 @@ struct ComputeDeviceChoice {
 
 /**
  * The settings that belong to the machine rather than to one plugin instance, kept in
- * <NeuralNote>/global.settings.
+ * <Simple Sampler>/global.settings.
  *
  * Getters serve an in-memory copy, refreshed by reload(). Any setter saves every setting, not just
  * the one it changed, so the file lists what the app is using rather than only what the user has

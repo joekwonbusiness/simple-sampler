@@ -1,11 +1,16 @@
-You're about to install NeuralNote on your computer.
+You're about to install Simple Sampler on your computer.
 
-NeuralNote is an audio-to-MIDI plugin that uses MuScriptor, a Kyutai/Mirelo neural network, for transcription.
+Simple Sampler is derived from NeuralNote and uses MuScriptor, a Kyutai/Mirelo neural network, for audio-to-MIDI transcription.
 
-Everything in NeuralNote runs locally on your computer. No audio data is sent to any server, and NeuralNote does not collect any data from you.
+Transcription runs locally. Model files are downloaded from Hugging Face on first use; audio is not uploaded by the plugin.
 
-For more information about NeuralNote, to report issues, request features, contribute, or download the source code, visit:
+For source code, issues, and releases, visit:
+- https://github.com/joekwonbusiness/simple-sampler
+
+Simple Sampler is based on NeuralNote:
 - https://github.com/DamRsn/NeuralNote
 
 For more information about MuScriptor, visit:
 - https://kyutai.org/blog/2026-07-10-muscriptor/
+
+Modified from NeuralNote installer text for Simple Sampler, 2026.

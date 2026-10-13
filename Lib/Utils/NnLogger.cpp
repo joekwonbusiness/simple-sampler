@@ -1,5 +1,6 @@
 //
 // Created by Damien Ronssin on 12.10.26.
+// Modified for Simple Sampler, 2026.
 //
 
 #include "NnLogger.h"
@@ -93,7 +94,7 @@ void onMslLog(msl::LogLevel inLevel, std::string_view inText)
 } // namespace
 
 NnLogger::NnLogger()
-    : mFile(NNFileUtils::getLogsDirectory().getChildFile("NeuralNote.log"))
+    : mFile(NNFileUtils::getLogsDirectory().getChildFile("SimpleSampler.log"))
 {
     juce::FileLogger::trimFileSize(mFile, MAX_INITIAL_FILE_SIZE_BYTES);
     mFile.create();
@@ -213,7 +214,7 @@ void NnLogger::_writeSessionHeader()
 #endif
 
     const juce::StringArray lines {
-        "NeuralNote " + juce::String(ProjectInfo::versionString) + " " + build + " " + arch,
+        "Simple Sampler " + juce::String(ProjectInfo::versionString) + " " + build + " " + arch,
         "Plugin format: "
             + juce::String(juce::AudioProcessor::getWrapperTypeDescription(juce::PluginHostType::getPluginLoadedAs())),
         "Host: " + juce::String(host.getHostDescription()) + " (" + juce::PluginHostType::getHostPath() + ")",

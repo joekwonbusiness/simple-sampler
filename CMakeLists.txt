@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 3.24)
-project(NeuralNotePlugin VERSION 2.1.0)
+
+# Modified from NeuralNote for the Simple Sampler distribution, 2026.
+project(SimpleSamplerPlugin VERSION 0.1.0)
 
 # C++ settings
 set(CMAKE_CXX_STANDARD 23)
@@ -111,7 +113,7 @@ if (NOT NEURALNOTE_MUSCRIPTOR_DEBUG)
   endforeach ()
 endif ()
 
-set(BaseTargetName NeuralNote)
+set(BaseTargetName SimpleSampler)
 
 # Set COPY_PLUGIN_AFTER_BUILD to TRUE on Mac and to FALSE on Windows due to permission issues.
 # Not when building for another architecture: native hosts couldn't load the copied plugins.
@@ -123,9 +125,9 @@ endif ()
 
 juce_add_plugin("${BaseTargetName}"
         # VERSION ...                               # Set this if the plugin version is different to the project version
-        ICON_BIG "${CMAKE_CURRENT_LIST_DIR}/NeuralNote/Assets/Logo/neuralnote-1024.png"
-        COMPANY_NAME "Dr. Audio"
-        BUNDLE_ID "com.draudio.neuralnote"
+        ICON_BIG "${CMAKE_CURRENT_LIST_DIR}/NeuralNote/Assets/Logo/simple-sampler.svg"
+        COMPANY_NAME "Simple Sampler"
+        BUNDLE_ID "com.simplesampler.plugin"
         IS_SYNTH FALSE
         NEEDS_MIDI_INPUT FALSE
         NEEDS_MIDI_OUTPUT TRUE
@@ -135,21 +137,12 @@ juce_add_plugin("${BaseTargetName}"
         MICROPHONE_PERMISSION_ENABLED TRUE
         MICROPHONE_PERMISSION_TEXT "Need access to Microphone"
         HARDENED_RUNTIME_ENABLED TRUE
-        PLUGIN_MANUFACTURER_CODE DrAu
-        PLUGIN_CODE NRNT
+        PLUGIN_MANUFACTURER_CODE SmSa
+        PLUGIN_CODE SS01
         FORMATS AU VST3 Standalone
         # Only acted on for Linux, the one platform JUCE_USE_CURL is set for below.
         NEEDS_CURL TRUE
-        PRODUCT_NAME "NeuralNote")
-
-# juce_add_plugin builds AppIcon.icns / icon.ico from ICON_BIG, with one size in the .icns and
-# four in the .ico. Replace them with the full size sets in Assets/Logo.
-get_target_property(nn_generated_dir ${BaseTargetName} JUCE_GENERATED_SOURCES_DIRECTORY)
-if (APPLE)
-  configure_file(NeuralNote/Assets/Logo/NeuralNote.icns "${nn_generated_dir}/AppIcon.icns" COPYONLY)
-elseif (WIN32)
-  configure_file(NeuralNote/Assets/Logo/NeuralNote.ico "${nn_generated_dir}/icon.ico" COPYONLY)
-endif ()
+        PRODUCT_NAME "Simple Sampler")
 
 juce_generate_juce_header(${BaseTargetName})
 
@@ -223,7 +216,7 @@ if (${LTO})
   message(STATUS "Link Time Optimization (LTO) enabled")
 endif ()
 
-# Writes each format's dSYM beside its bundle, e.g. VST3/NeuralNote.vst3.dSYM. Single-config
+# Writes each format's dSYM beside its bundle, e.g. VST3/Simple Sampler.vst3.dSYM. Single-config
 # generators only, as the presets use.
 if (NEURALNOTE_SYMBOLS AND APPLE AND CMAKE_BUILD_TYPE STREQUAL "Release")
   foreach (format Standalone VST3 AU)

@@ -1,5 +1,6 @@
 //
 // Created by Damien Ronssin on 11/11/2024.
+// Modified for Simple Sampler, 2026.
 //
 
 #include "UpdateCheck.h"
@@ -63,8 +64,8 @@ UpdateCheck::UpdateCheck()
 
 juce::String UpdateCheck::_message() const
 {
-    return mUpdateAvailable ? "A new version of NeuralNote is available"
-                            : "You are on the latest version of NeuralNote";
+    return mUpdateAvailable ? "A new version of Simple Sampler is available"
+                            : "You are on the latest version of Simple Sampler";
 }
 
 juce::Rectangle<int> UpdateCheck::_panelBounds() const
@@ -144,7 +145,7 @@ void UpdateCheck::checkForUpdate(bool inShowNotificationOnLatestVersion)
         }
 
         juce::Thread::launch([safe_this, inShowNotificationOnLatestVersion] {
-            const juce::URL url("https://api.github.com/repos/DamRsn/NeuralNote/releases/latest");
+            const juce::URL url("https://api.github.com/repos/joekwonbusiness/simple-sampler/releases/latest");
 
             const auto result = url.readEntireTextStream();
 

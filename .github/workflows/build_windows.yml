@@ -1,15 +1,17 @@
-name: Build Windows
+name: Build Windows x64 VST3
 
-# Builds the x64 installer with clang-cl, and uploads it with its PDBs to the draft release.
+# Modified from NeuralNote's Windows release workflow for Simple Sampler, 2026.
 on:
-  workflow_call:
-    inputs:
-      release-tag:
-        type: string
-        required: true
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
 
 jobs:
-  build:
+  build-vst3:
     runs-on: windows-latest
     timeout-minutes: 180
     env:
@@ -20,10 +22,12 @@ jobs:
       CCACHE_DIR: ${{ github.workspace }}/.ccache
       CCACHE_BASEDIR: ${{ github.workspace }}
       CCACHE_MAXSIZE: 2G
+
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Check out source and submodules
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          submodules: true
+          submodules: recursive
           persist-credentials: false
 
       - name: Restore Vulkan SDK
@@ -32,38 +36,68 @@ jobs:
           path: C:\VulkanSDK\${{ env.VULKAN_SDK_VERSION }}
           key: vulkan-sdk-${{ env.VULKAN_SDK_VERSION }}
 
-      - name: Set up toolchain
+      - name: Set up clang-cl, Vulkan, and ccache
         run: python .github/scripts/windows_tools.py
 
-      - name: Restore soundfont
+      - name: Restore generated soundfont
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: NeuralNote/Assets/SoundFont
           key: soundfont-${{ hashFiles('Tools/fetch_soundfont.py', 'Tools/make_soundfont.py') }}
 
-      - name: Restore ccache
+      - name: Restore compiler cache
         uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: .ccache
           key: ccache-windows-x64-${{ github.run_id }}-${{ github.run_attempt }}
           restore-keys: ccache-windows-x64-
 
-      - name: Build
+      - name: Configure and build Release
         run: python .github/scripts/configure_and_build.py
 
-      - name: Save ccache
+      - name: Save compiler cache
         if: always()
         uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: .ccache
           key: ccache-windows-x64-${{ github.run_id }}-${{ github.run_attempt }}
 
-      - name: Package
-        run: python .github/scripts/package_windows.py
+      - name: Verify and stage VST3 artifact
+        shell: pwsh
+        run: |
+          $bundle = "build/SimpleSampler_artefacts/Release/VST3/Simple Sampler.vst3"
+          $binary = "$bundle/Contents/x86_64-win/Simple Sampler.vst3"
+          $moduleInfo = "$bundle/Contents/Resources/moduleinfo.json"
 
-      - name: Upload to the draft release
-        env:
-          GH_TOKEN: ${{ github.token }}
-          GH_REPO: ${{ github.repository }}
-          RELEASE_TAG: ${{ inputs.release-tag }}
-        run: gh release upload "$env:RELEASE_TAG" Installers/Windows/Output/NeuralNoteInstaller.exe Installers/Windows/Output/NeuralNoteInstaller_PDBs.zip --clobber
+          if (-not (Test-Path -LiteralPath $binary)) {
+            throw "Missing x64 VST3 binary: $binary"
+          }
+
+          $metadata = Get-Content -Raw -LiteralPath $moduleInfo
+          foreach ($expected in @('"Name": "Simple Sampler"', '"Vendor": "Simple Sampler"', '"Version": "0.1.0"')) {
+            if (-not $metadata.Contains($expected)) {
+              throw "moduleinfo.json does not contain $expected"
+            }
+          }
+
+          $headers = & dumpbin /headers $binary
+          if (-not ($headers -match '8664 machine \(x64\)')) {
+            throw "VST3 binary is not x64"
+          }
+
+          New-Item -ItemType Directory -Path artifact/licenses -Force | Out-Null
+          Copy-Item -LiteralPath $bundle -Destination artifact -Recurse
+          Copy-Item -LiteralPath LICENSE -Destination artifact/licenses/Apache-2.0.txt
+          Copy-Item -LiteralPath NOTICE -Destination artifact/licenses/NOTICE.txt
+          Copy-Item -LiteralPath MODEL_LICENSE.md -Destination artifact/licenses/MODEL_LICENSE.md
+          Copy-Item -LiteralPath Installers/license.txt -Destination artifact/licenses/THIRD_PARTY_NOTICES.txt
+          Get-FileHash -Algorithm SHA256 -LiteralPath $binary
+
+      - name: Upload installable VST3 bundle
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+        with:
+          name: Simple-Sampler-Windows-x64-VST3
+          path: artifact/
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 14

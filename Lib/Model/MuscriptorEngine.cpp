@@ -1,4 +1,5 @@
 //
+// Modified for Simple Sampler, 2026.
 // Created by Damien Ronssin on 03.08.26.
 //
 
@@ -84,16 +85,16 @@ MuscriptorEngine::Outcome MuscriptorEngine::_loadModel(ModelSize inModelSize, co
         // installed, so this is the first place it shows. Deleting it is what makes it downloadable.
         if (loaded.error() == msl::Error::UnsupportedCheckpointVersion) {
             mLastErrorMessage = model_file.getFileName().toStdString()
-                                + " is for another version of NeuralNote. Delete it from the models folder,"
+                                + " is for another version of Simple Sampler. Delete it from the models folder,"
                                   " then download it again";
         }
 
         // Only an explicit choice can fail this way. The list lasts as long as the plugin binary is
-        // loaded, which in a DAW can outlast closing NeuralNote.
+        // loaded, which in a DAW can outlast closing Simple Sampler.
         else if (loaded.error() == msl::Error::DeviceUnavailable && options.device.has_value()) {
             mLastErrorMessage = ComputeDevices::label(devices, *options.device)
                                 + " could not be used. Choose Auto or CPU under Settings > Compute device,"
-                                  " or restart NeuralNote (or your DAW) if your GPUs have changed";
+                                  " or restart Simple Sampler (or your DAW) if your GPUs have changed";
         }
 
         else {

@@ -1,19 +1,22 @@
 #!/usr/bin/env python3
-"""Builds the Windows installer from build/NeuralNote_artefacts/Release.
+"""Builds the Windows installer from build/SimpleSampler_artefacts/Release.
+
+Modified from NeuralNote for the Simple Sampler distribution, 2026.
 
 Moves the PDBs out of the release directory first, since the linker writes them
 beside the binaries, some inside the VST3 bundle, and the installer copies those
-directories whole. Writes NeuralNoteInstaller.exe and NeuralNoteInstaller_PDBs.zip
+directories whole. Writes SimpleSamplerInstaller.exe and SimpleSamplerInstaller_PDBs.zip
 to Installers/Windows/Output.
 """
 
 import os
 import shutil
 import subprocess
+import tempfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-RELEASE_DIR = ROOT / "build" / "NeuralNote_artefacts" / "Release"
+RELEASE_DIR = ROOT / "build" / "SimpleSampler_artefacts" / "Release"
 OUTPUT_DIR = ROOT / "Installers" / "Windows" / "Output"
 ISCC = Path(os.environ["ProgramFiles(x86)"]) / "Inno Setup 6" / "ISCC.exe"
 
@@ -35,15 +38,15 @@ def main() -> None:
     if not ISCC.exists():
         raise SystemExit(f"Inno Setup not found at {ISCC}")
 
-    symbols_dir = Path(os.environ["RUNNER_TEMP"]) / "symbols"
+    symbols_dir = Path(os.environ.get("RUNNER_TEMP", tempfile.gettempdir())) / "simple-sampler-symbols"
     collect_pdbs(symbols_dir)
 
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
-    shutil.make_archive(str(OUTPUT_DIR / "NeuralNoteInstaller_PDBs"), "zip", symbols_dir)
+    shutil.make_archive(str(OUTPUT_DIR / "SimpleSamplerInstaller_PDBs"), "zip", symbols_dir)
 
-    # neuralnote.iss resolves ReleaseDir from its own directory, two levels below the root.
+    # simple-sampler.iss resolves ReleaseDir from its own directory, two levels below the root.
     subprocess.run(
-        [str(ISCC), str(ROOT / "Installers" / "Windows" / "neuralnote.iss"),
+        [str(ISCC), str(ROOT / "Installers" / "Windows" / "simple-sampler.iss"),
          f"/DReleaseDir={RELEASE_DIR.relative_to(ROOT)}"],
         check=True,
     )

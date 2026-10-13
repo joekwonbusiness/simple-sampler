@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 """Sets up the Windows toolchain for configure_and_build.py, through GITHUB_ENV.
 
+Modified from NeuralNote for the Simple Sampler distribution, 2026.
+
 - The Visual Studio developer environment, for the Windows SDK and its tools.
   Nothing is compiled with cl.
 - clang-cl, lld-link, llvm-lib and llvm-rc from the LLVM the runner image ships.
@@ -31,7 +33,7 @@ def download(url: str, sha256: str, destination: Path) -> None:
     print(f"Downloading {url}", flush=True)
 
     # sdk.lunarg.com answers 403 to urllib's default User-Agent.
-    request = urllib.request.Request(url, headers={"User-Agent": "NeuralNote-CI"})
+    request = urllib.request.Request(url, headers={"User-Agent": "SimpleSampler-CI"})
 
     with urllib.request.urlopen(request, timeout=60) as response, open(destination, "wb") as file:
         shutil.copyfileobj(response, file)

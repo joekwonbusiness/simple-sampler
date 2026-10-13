@@ -1,5 +1,6 @@
 //
 // Created by Damien Ronssin on 11.08.26.
+// Modified for Simple Sampler, 2026.
 //
 
 #ifndef NNFileUtils_h
@@ -13,32 +14,32 @@
 #include "TranscriptionConstants.h"
 
 /**
- * Every location NeuralNote reads or writes outside what the host hands it. The getters only
+ * Every location Simple Sampler reads or writes outside what the host hands it. The getters only
  * compute paths; creating one is ensureDirectoryExists's job, called where something is about to
  * be written.
  */
 namespace NNFileUtils
 {
 
-/** <user application data>/NeuralNote: ~/Library on macOS, %APPDATA% on Windows, ~/.config on Linux. */
+/** <user application data>/Simple Sampler: ~/Library on macOS, %APPDATA% on Windows, ~/.config on Linux. */
 juce::File getNeuralNoteDirectory();
 
-/** <NeuralNote>/models, where checkpoints are downloaded to, or put by hand. */
+/** <Simple Sampler>/models, where checkpoints are downloaded to, or put by hand. */
 juce::File getModelsDirectory();
 
-/** <NeuralNote>/global.settings, the settings shared by every instance. See NnGlobalSettings. */
+/** <Simple Sampler>/global.settings, the settings shared by every instance. See NnGlobalSettings. */
 juce::File getGlobalSettingsFile();
 
-/** <NeuralNote>/recordings. */
+/** <Simple Sampler>/recordings. */
 juce::File getRecordingsDirectory();
 
-/** <NeuralNote>/crashes, where CrashReporter writes its minidumps. */
+/** <Simple Sampler>/crashes, where CrashReporter writes its minidumps. */
 juce::File getCrashReportsDirectory();
 
-/** <NeuralNote>/logs, where NnLogger writes. */
+/** <Simple Sampler>/logs, where NnLogger writes. */
 juce::File getLogsDirectory();
 
-/** <temp>/neuralnote, for the file a MIDI drag hands the OS and nothing longer. */
+/** <temp>/simple-sampler, for the file a MIDI drag hands the OS and nothing longer. */
 juce::File getMidiDragDirectory();
 
 /** Where an "Export MIDI" chooser opens. Not ours: the user's music folder. */

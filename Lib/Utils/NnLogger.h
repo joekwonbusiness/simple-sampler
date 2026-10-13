@@ -1,4 +1,5 @@
 //
+// Modified for Simple Sampler, 2026.
 // Created by Damien Ronssin on 12.10.26.
 //
 
@@ -8,7 +9,7 @@
 #include <JuceHeader.h>
 
 /**
- * Writes NeuralNote's log to <NeuralNote>/logs/NeuralNote.log, one line per message:
+ * Writes Simple Sampler's log to <Simple Sampler>/logs/SimpleSampler.log, one line per message:
  * "2026-10-12 14:03:22.123 [INFO ] [message] Component: text".
  *
  * One per process, shared through juce::SharedResourcePointer. While it exists it is JUCE's current

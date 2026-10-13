@@ -1,5 +1,6 @@
 //
 // Created by Damien Ronssin on 11/11/2024.
+// Modified for Simple Sampler, 2026.
 //
 
 #ifndef UPDATECHECK_H
@@ -10,7 +11,7 @@
 #include "NnFlatButton.h"
 
 /**
- * The notification that says whether there is a newer NeuralNote, on the same panel the menus and
+ * The notification that says whether there is a newer Simple Sampler, on the same panel the menus and
  * tooltips sit on. Asks GitHub for the latest release, then shows itself for ten seconds -- longer
  * while the pointer is over it, so it cannot expire out from under someone reading it.
  *
@@ -58,7 +59,7 @@ private:
     static constexpr double mNotificationDurationSeconds = 10.0f;
     static constexpr double mTimeIncrementOnMouseOverSeconds = 3.0f;
 
-    const juce::URL mLatestReleaseUrl {"https://github.com/DamRsn/NeuralNote/releases/latest"};
+    const juce::URL mLatestReleaseUrl {"https://github.com/joekwonbusiness/simple-sampler/releases/latest"};
 };
 
 #endif //UPDATECHECK_H

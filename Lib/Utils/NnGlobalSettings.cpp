@@ -1,5 +1,6 @@
 //
 // Created by Damien Ronssin on 29.08.26.
+// Modified for Simple Sampler, 2026.
 //
 
 #include "NnGlobalSettings.h"
@@ -29,7 +30,7 @@ namespace
     struct Store : juce::DeletedAtShutdown {
         // Declared first so that it outlives the file, which takes a pointer to it and uses it while
         // saving from its own destructor.
-        juce::InterProcessLock lock {"NeuralNoteGlobalSettings"};
+        juce::InterProcessLock lock {"SimpleSamplerGlobalSettings"};
         juce::PropertiesFile file;
 
         Store()

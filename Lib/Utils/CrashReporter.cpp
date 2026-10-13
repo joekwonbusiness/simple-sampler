@@ -1,5 +1,6 @@
 //
 // Created by Damien Ronssin on 09.10.26.
+// Modified for Simple Sampler, 2026.
 //
 
 #include "CrashReporter.h"
@@ -61,7 +62,7 @@ void writeMinidump(EXCEPTION_POINTERS* inException)
     wchar_t path[MAX_PATH * 2];
     std::swprintf(path,
                   std::size(path),
-                  L"%lsNeuralNote_crash_%04u-%02u-%02u_%02u-%02u-%02u_%lu.dmp",
+                  L"%lsSimpleSampler_crash_%04u-%02u-%02u_%02u-%02u-%02u_%lu.dmp",
                   gDirectory.c_str(),
                   time.wYear,
                   time.wMonth,
@@ -93,7 +94,7 @@ LONG WINAPI onException(EXCEPTION_POINTERS* inException)
 }
 
 // abort() raises SIGABRT, then ends the process without reaching the exception filter. The static
-// CRT is this binary's own, so only aborts in NeuralNote's code come here.
+// CRT is this binary's own, so only aborts in Simple Sampler's code come here.
 void onAbort(int)
 {
     // MiniDumpWriteDump cannot reliably walk the calling thread's stack without a captured context.

@@ -1,5 +1,6 @@
 //
 // Created by Damien Ronssin on 11.08.26.
+// Modified for Simple Sampler, 2026.
 //
 
 #include "NNFileUtils.h"
@@ -14,7 +15,7 @@ namespace NNFileUtils
 juce::File getNeuralNoteDirectory()
 {
     return juce::File::getSpecialLocation(juce::File::SpecialLocationType::userApplicationDataDirectory)
-        .getChildFile("NeuralNote");
+        .getChildFile("Simple Sampler");
 }
 
 juce::File getModelsDirectory()
@@ -44,7 +45,8 @@ juce::File getLogsDirectory()
 
 juce::File getMidiDragDirectory()
 {
-    return juce::File::getSpecialLocation(juce::File::SpecialLocationType::tempDirectory).getChildFile("neuralnote");
+    return juce::File::getSpecialLocation(juce::File::SpecialLocationType::tempDirectory)
+        .getChildFile("simple-sampler");
 }
 
 juce::File getDefaultMidiExportDirectory()
@@ -127,10 +129,10 @@ std::filesystem::path toPath(const juce::File& inFile)
 juce::String getMidiExportFileName(const juce::String& inSourceAudioFileName)
 {
     if (inSourceAudioFileName.isEmpty()) {
-        return "NNTranscription.mid";
+        return "SimpleSampler-Transcription.mid";
     }
 
-    return inSourceAudioFileName + "_NNTranscription.mid";
+    return inSourceAudioFileName + "_SimpleSampler.mid";
 }
 
 } // namespace NNFileUtils
